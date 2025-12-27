@@ -1,0 +1,29 @@
+{
+  "name": "@liquid-bricks/lib-diagnostics",
+  "version": "1.0.0",
+  "description": "Structured diagnostics utilities with loggers, metrics adapters, and assertions.",
+  "type": "module",
+  "main": "./diagnostics.js",
+  "exports": {
+    ".": "./diagnostics.js",
+    "./diagnostics": "./diagnostics.js",
+    "./DiagnosticError": "./DiagnosticError.js",
+    "./loggers/console": "./loggers/console.js",
+    "./loggers/nats": "./loggers/nats.js",
+    "./metrics/console": "./metrics/console.js",
+    "./metrics/nats": "./metrics/nats.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "diagnostics.js",
+    "DiagnosticError.js",
+    "loggers",
+    "metrics",
+    "README.md"
+  ],
+  "sideEffects": false,
+  "scripts": {
+    "test": "node test/run.js"
+  },
+  "license": "ISC"
+}
