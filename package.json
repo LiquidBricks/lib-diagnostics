@@ -7,12 +7,10 @@
   "exports": {
     ".": "./diagnostics.js",
     "./diagnostics": "./diagnostics.js",
-    "./DiagnosticError": "./DiagnosticError.js",
     "./loggers/console": "./loggers/console.js",
     "./loggers/nats": "./loggers/nats.js",
     "./metrics/console": "./metrics/console.js",
-    "./metrics/nats": "./metrics/nats.js",
-    "./package.json": "./package.json"
+    "./metrics/nats": "./metrics/nats.js"
   },
   "files": [
     "diagnostics.js",
