@@ -9,12 +9,24 @@ Lightweight diagnostics utility that emits structured logs, integrates with metr
 import { diagnostics } from '@liquid-bricks/lib-diagnostics'; // or './diagnostics.js' locally
 ```
 
+## Diagnostic code catalog
+
+Production diagnostic codes live in the static catalog subpath:
+
+```js
+import { PRECONDITION_REQUIRED } from '@liquid-bricks/lib-diagnostics/codes'
+
+diag.require(value, PRECONDITION_REQUIRED, 'value is required')
+```
+
+The catalog also exports frozen `codes` and `definitions` indexes for tooling that needs to enumerate and analyze the complete code inventory. See [`codes/README.md`](./codes/README.md) for the contract and contribution rules.
+
 ## Factory: `diagnostics(options)`
 
 - Signature: `diagnostics(options?: DiagnosticsOptions): Diagnostics`
 - Parameters:
   - `logger` (default: `console`): Object with optional methods `error|warn|info|debug(entry)`.
-  - `metrics` (default: `null`): Optional `{ count(code: string, n: number, meta?: object), timing(name: string, ms: number, meta?: object) }`.
+  - `metrics` (default: console metrics adapter): Optional `{ count(code: string, n: number, meta?: object), timing(name: string, ms: number, meta?: object) }`.
   - `sample` (default: `(code, level, meta) => true`): Predicate to decide whether to emit.
   - `rateLimit` (default: internal token-bucket per `(code,level)`, 10 events/second burst): `(code?: string, level?: string) => boolean`.
   - `redact` (default: identity): `(meta?: object) => object` used to scrub meta fields before emission and error surfaces.
@@ -169,10 +181,10 @@ diag.warnOnce('DEPRECATED_CONFIG', 'use NEW_VAR instead', { file: '.env' });
 diag.warnOnce('DEPRECATED_CONFIG', 'use NEW_VAR instead'); // suppressed
 ```
 
-### `timer(name, baseMeta)` → `{ stop(extraMeta) -> ms }`
+### `timer(name, baseMeta, options?)` → `{ stop(extraMeta) -> ms }`
 
 - Description: Measures elapsed time between creation and `stop()`, emits `info` entry and calls `metrics.timing` if provided.
-- Parameters: `name: string`, `baseMeta?: object`.
+- Parameters: `name: string`, `baseMeta?: object`, `options?: { code?: string }`. The optional code makes the emitted timer code statically catalogable; otherwise it remains `TIMER_${name}`.
 - Returns: An object with `stop(extraMeta?: object): number` where the result is the measured milliseconds.
 
 ```js
@@ -303,7 +315,7 @@ diag.info('maybe sampled');
 
 ## Notes
 
-- The provider writes with `logger[level](entry)` where `entry` includes `ts`, `level`, optional `code`, `msg`, and `meta`.
+- The provider writes with `logger[level](entry)` where `entry` includes context plus optional `code`, `msg`, and `meta`; logger adapters may add fields such as `ts`.
 - When both sampling and rate limiting are present, sampling is evaluated first, then rate limiting.
 - `DiagnosticError.toJSON()` includes a safe subset of `cause` (`name`, `message`).
 

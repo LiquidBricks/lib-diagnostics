@@ -7,6 +7,7 @@
   "exports": {
     ".": "./diagnostics.js",
     "./diagnostics": "./diagnostics.js",
+    "./codes": "./codes/index.js",
     "./loggers/console": "./loggers/console.js",
     "./loggers/nats": "./loggers/nats.js",
     "./metrics/console": "./metrics/console.js",
@@ -15,6 +16,7 @@
   "files": [
     "diagnostics.js",
     "DiagnosticError.js",
+    "codes",
     "loggers",
     "metrics",
     "README.md"

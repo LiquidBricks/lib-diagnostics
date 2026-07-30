@@ -1,6 +1,6 @@
 // diagnostics.js
 
-const NO_CODE = 'NO_CODE'
+import { NO_CODE } from './codes/index.js'
 import { createConsoleLogger } from './loggers/console.js'
 import { createConsoleMetrics } from './metrics/console.js'
 import { DiagnosticError } from './DiagnosticError.js'
@@ -80,14 +80,15 @@ export function diagnostics({
     warnOnce(code, msg, meta) {
       return this.once(`warn:${code}`, () => this.warn(false, code, msg, meta));
     },
-    timer(name, baseMeta) {
+    timer(name, baseMeta, options) {
       const start = now();
+      const code = options?.code ?? `TIMER_${name}`;
       return {
         stop(extraMeta) {
           const ms = now() - start;
           const meta = { ...baseMeta, ...extraMeta, duration_ms: ms };
           metrics?.timing?.(name, ms, meta);
-          emit('info', { code: `TIMER_${name}`, msg: 'timer.stop', meta });
+          emit('info', { code, msg: 'timer.stop', meta });
           return ms;
         }
       };
