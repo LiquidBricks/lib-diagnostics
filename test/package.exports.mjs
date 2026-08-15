@@ -15,6 +15,7 @@ const expectedExportKeys = [
   './loggers/nats',
   './metrics/console',
   './metrics/nats',
+  './providers/file',
 ]
 
 test('package exports expose the documented diagnostics surface', () => {

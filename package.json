@@ -11,7 +11,8 @@
     "./loggers/console": "./loggers/console.js",
     "./loggers/nats": "./loggers/nats.js",
     "./metrics/console": "./metrics/console.js",
-    "./metrics/nats": "./metrics/nats.js"
+    "./metrics/nats": "./metrics/nats.js",
+    "./providers/file": "./providers/file.js"
   },
   "files": [
     "diagnostics.js",
@@ -19,6 +20,7 @@
     "codes",
     "loggers",
     "metrics",
+    "providers",
     "README.md"
   ],
   "sideEffects": false,

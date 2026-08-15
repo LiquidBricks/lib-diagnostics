@@ -74,6 +74,35 @@ diag.info('boot');                     // sampled out (not emitted)
 diag.warn(false, 'CONFIG_MISSING', 'Using defaults', { env: 'dev', ssn: '123-45-6789' });
 ```
 
+### File provider
+
+The Node-only file provider supplies both logger and metrics adapters backed by
+one append-only NDJSON file. It preserves structured `Error` details, including
+`message`, `stack`, `cause`, and enumerable fields such as `code`, `stdout`, and
+`stderr`.
+
+```js
+import { diagnostics } from '@liquid-bricks/lib-diagnostics'
+import {
+  createFileDiagnosticsProvider,
+} from '@liquid-bricks/lib-diagnostics/providers/file'
+
+const provider = createFileDiagnosticsProvider({
+  file: '/var/log/liquid-bricks/component-agent.ndjson',
+})
+const diag = diagnostics({
+  logger: provider.logger,
+  metrics: provider.metrics,
+})
+
+diag.info('component agent started')
+provider.close()
+```
+
+The provider creates the parent directory when needed and appends one complete
+JSON record per synchronous write. Call `close()` during process shutdown; it is
+safe to call more than once.
+
 ## Diagnostics object API
 
 The object returned by `diagnostics()` exposes the following members.
